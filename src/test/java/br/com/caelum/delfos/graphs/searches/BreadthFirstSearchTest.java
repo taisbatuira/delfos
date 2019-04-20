@@ -22,13 +22,13 @@ class BreadthFirstSearchTest {
     @BeforeEach
     void setUp() {
         reader = new GraphFileReader("data/sample.txt");
-        from = 605;
-        to = 289;
+        from = 440;
+        to = 201;
     }
 
     @AfterEach
     void tearDown() {
-        System.out.println("Founded path in breadth search: " + path);
+        System.out.println("Found path in breadth search: " + path);
     }
 
     @Test
@@ -44,6 +44,8 @@ class BreadthFirstSearchTest {
 
         Integer last = path.getLast();
         assertEquals(to, last);
+
+        System.out.print("Default Graph: ");
 
     }
 
@@ -61,5 +63,7 @@ class BreadthFirstSearchTest {
 
         Integer last = path.getLast();
         assertEquals(to, last);
+
+        System.out.print("Weighted Graph: ");
     }
 }

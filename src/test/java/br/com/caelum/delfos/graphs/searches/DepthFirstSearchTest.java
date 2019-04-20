@@ -22,13 +22,13 @@ class DepthFirstSearchTest {
     @BeforeEach
     void setUp() {
         reader = new GraphFileReader("data/sample.txt");
-        from = 605;
-        to = 289;
+        from = 440;
+        to = 201;
     }
 
     @AfterEach
     void tearDown() {
-        System.out.println("Founded path in depth search: " + path);
+        System.out.println("Found path in depth search: " + path);
     }
 
     @Test
@@ -44,6 +44,8 @@ class DepthFirstSearchTest {
 
         Integer last = path.getLast();
         assertEquals(to, last);
+
+        System.out.print("Default Graph: ");
 
     }
 
@@ -62,5 +64,6 @@ class DepthFirstSearchTest {
         Integer last = path.getLast();
         assertEquals(to, last);
 
+        System.out.print("Weighted Graph: ");
     }
 }
