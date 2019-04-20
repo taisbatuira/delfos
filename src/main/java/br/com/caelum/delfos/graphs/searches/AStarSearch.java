@@ -10,7 +10,6 @@ import java.util.LinkedList;
 public class AStarSearch<V, E> implements GraphSearch<V> {
 
     private final Graph<V, E> graph;
-    private final LinkedList<V> path = new LinkedList<>();
 
     public AStarSearch(Graph<V, E> graph) {
         this.graph = graph;
