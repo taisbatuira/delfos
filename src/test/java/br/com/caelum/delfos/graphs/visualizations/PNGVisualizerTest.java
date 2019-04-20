@@ -23,7 +23,7 @@ class PNGVisualizerTest {
     }
 
     @Test
-    void shouldExportAIMageOfADefaultGraph() {
+    void shouldExportAnIMageOfADefaultGraph() {
         DefaultGraph graph = reader.readDefaultGraph();
 
         PNGVisualizer<Integer, DefaultEdge> visualizer = new PNGVisualizer<>();
@@ -33,7 +33,7 @@ class PNGVisualizerTest {
     }
 
     @Test
-    void shouldExportAIMageOfAWeightedGraph() {
+    void shouldExportAnIMageOfAWeightedGraph() {
         WeightedGraph graph = reader.readWeightedGraph();
 
         PNGVisualizer<Integer, DefaultWeightedEdge> visualizer = new PNGVisualizer<>();
