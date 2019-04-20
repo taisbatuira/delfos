@@ -3,6 +3,7 @@
 
 data/
 target/
+.DS_Store
 
 ### Eclipse ###
 .metadata
