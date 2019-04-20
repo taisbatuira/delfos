@@ -1,47 +1,104 @@
 package br.com.caelum.delfos.graphs.infra;
 
 
-import br.com.caelum.delfos.graphs.GraphDTO;
+import br.com.caelum.delfos.graphs.DefaultGraph;
+import br.com.caelum.delfos.graphs.WeightedGraph;
+import io.vavr.Tuple;
+import io.vavr.Tuple2;
 import org.jgrapht.Graph;
+import org.jgrapht.graph.DefaultDirectedGraph;
+import org.jgrapht.graph.DefaultDirectedWeightedGraph;
+import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.DefaultWeightedEdge;
-import org.jgrapht.graph.SimpleWeightedGraph;
 
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Scanner;
 
 public class GraphFileReader {
 
-    private final Path path;
+    private final Scanner scanner;
 
-    public GraphFileReader(String path) {
-        this.path = Paths.get(path);
+
+    public GraphFileReader(String file) {
+        Path path = Paths.get(file);
+        try {
+            scanner = new Scanner(path);
+        } catch (IOException e) {
+            throw new RuntimeException("Cannot read file: " + path, e);
+        }
+        scanner.useDelimiter("(\\s)?](\n)?");
     }
 
-    public GraphDTO read() throws IOException {
-        Scanner scanner = new Scanner(path);
-        scanner.useDelimiter("(\\s)?](\n)?");
-
-        Graph<Integer, DefaultWeightedEdge> graph = new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
+    public DefaultGraph readDefaultGraph() {
+        Graph<Integer, DefaultEdge> graph = new DefaultDirectedGraph<>(DefaultEdge.class);
 
         while(scanner.hasNext()) {
             String line = scanner.next();
 
-            String[] destinations = line.replaceAll("(\\[\\s*|\\[\\d)|(\\n?])", "")
-                    .replaceAll("(\\s+)|(\\n\\s?)", " ")
-                    .replaceAll("\\s{2,}", " ")
-                    .split(" ");
+            String[] destinations = extractDestinations(line);
 
-            Integer to = Integer.parseInt(destinations[0]);
-            graph.addVertex(to);
-            for(int i = 1; i < destinations.length; i++) {
-                Integer from = Integer.parseInt(destinations[i]);
-                graph.addVertex(from);
-                graph.addEdge(to, from);
+            List<Tuple2<Integer, Integer>> links = getLinks(destinations);
+            for (Tuple2<Integer, Integer> link : links) {
+                graph.addVertex(link._1);
+                graph.addVertex(link._2);
+                graph.addEdge(link._1, link._2);
             }
         }
 
-        return new GraphDTO(graph);
+        return new DefaultGraph(graph);
+    }
+
+    public WeightedGraph readWeightedGraph() {
+        Graph<Integer, DefaultWeightedEdge> graph = new DefaultDirectedWeightedGraph<>(DefaultWeightedEdge.class);
+
+        while(scanner.hasNext()) {
+            String line = scanner.next();
+
+            String[] destinations = extractDestinations(line);
+
+            List<Tuple2<Integer, Integer>> links = getLinks(destinations);
+            for (Tuple2<Integer, Integer> link : links) {
+                graph.addVertex(link._1);
+                graph.addVertex(link._2);
+                DefaultWeightedEdge edge = graph.addEdge(link._1, link._2);
+
+
+                if(edge == null) {
+                    DefaultWeightedEdge e = graph.getEdge(link._1, link._2);
+
+                    double weight = graph.getEdgeWeight(e) + 1.0;
+                    graph.setEdgeWeight(e, weight);
+                }
+
+            }
+        }
+
+        return new WeightedGraph(graph);
+    }
+
+    private String[] extractDestinations(String line) {
+        return line.replaceAll("(\\[\\s*|\\[\\d)|(\\n?])", "")
+                .replaceAll("(\\s+)|(\\n\\s?)", " ")
+                .replaceAll("\\s{2,}", " ")
+                .split(" ");
+    }
+
+    private List<Tuple2<Integer, Integer>> getLinks(String... destinations) {
+        LinkedList<Tuple2<Integer, Integer>> links = new LinkedList<>();
+
+        for(int i = 0; i < destinations.length - 1; i++) {
+            Integer to = Integer.parseInt(destinations[i]);
+            Integer from = Integer.parseInt(destinations[i + 1]);
+
+            Tuple2<Integer, Integer> link = Tuple.of(to, from);
+
+            links.add(link);
+        }
+
+        return links;
     }
 }
