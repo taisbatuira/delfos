@@ -3,6 +3,7 @@ package br.com.caelum.delfos.graphs.infra;
 
 import br.com.caelum.delfos.graphs.DefaultGraph;
 import br.com.caelum.delfos.graphs.WeightedGraph;
+import br.com.caelum.delfos.graphs.mappers.OldCoursesToNewCousesMapper;
 import io.vavr.Tuple;
 import io.vavr.Tuple2;
 import org.jgrapht.Graph;
@@ -43,9 +44,16 @@ public class GraphFileReader {
 
             List<Tuple2<Integer, Integer>> links = getLinks(destinations);
             for (Tuple2<Integer, Integer> link : links) {
-                graph.addVertex(link._1);
-                graph.addVertex(link._2);
-                graph.addEdge(link._1, link._2);
+                Integer from = OldCoursesToNewCousesMapper.getRelativeCourse(link._1);
+                Integer to = OldCoursesToNewCousesMapper.getRelativeCourse(link._2);
+
+                if(from.equals(to)) {
+                    continue;
+                }
+
+                graph.addVertex(from);
+                graph.addVertex(to);
+                graph.addEdge(from, to);
             }
         }
 
@@ -62,13 +70,20 @@ public class GraphFileReader {
 
             List<Tuple2<Integer, Integer>> links = getLinks(destinations);
             for (Tuple2<Integer, Integer> link : links) {
-                graph.addVertex(link._1);
-                graph.addVertex(link._2);
-                DefaultWeightedEdge edge = graph.addEdge(link._1, link._2);
+                Integer from = OldCoursesToNewCousesMapper.getRelativeCourse(link._1);
+                Integer to = OldCoursesToNewCousesMapper.getRelativeCourse(link._2);
+
+                if(from.equals(to)) {
+                    continue;
+                }
+
+                graph.addVertex(from);
+                graph.addVertex(to);
+                DefaultWeightedEdge edge = graph.addEdge(from, to);
 
 
                 if(edge == null) {
-                    DefaultWeightedEdge e = graph.getEdge(link._1, link._2);
+                    DefaultWeightedEdge e = graph.getEdge(from, to);
 
                     double weight = graph.getEdgeWeight(e) + 1.0;
                     graph.setEdgeWeight(e, weight);
