@@ -1,6 +1,5 @@
 package br.com.caelum.delfos.graphs;
 
-import br.com.caelum.delfos.graphs.exceptions.GraphException;
 import org.jgrapht.graph.DefaultEdge;
 
 import java.util.Optional;
