@@ -7,63 +7,35 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.LinkedList;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-
 class DepthFirstSearchTest {
 
     private GraphFileReader reader;
-    private Integer from;
-    private Integer to;
-    private LinkedList<Integer> path;
+    private DefaultSearchTest test;
+    private GraphSearch<Integer> searcher;
 
     @BeforeEach
     void setUp() {
         reader = new GraphFileReader("data/sample.txt");
-        from = 440;
-        to = 201;
+        test = new DefaultSearchTest();
+        test.setUp();
     }
 
     @AfterEach
     void tearDown() {
-        System.out.println("Found path in depth search: " + path);
+        test.tearDown("depth");
     }
 
     @Test
     void shouldTakeThePathOfADefaultGraphWhenTwoVertexAreSet() {
         DefaultGraph graph = reader.readDefaultGraph();
-        GraphSearch<Integer> searcher = new DepthFirstSearch<>(graph);
-        path = searcher.findPath(from, to);
-
-        assertNotNull(path);
-
-        Integer first = path.getFirst();
-        assertEquals(from, first);
-
-        Integer last = path.getLast();
-        assertEquals(to, last);
-
-        System.out.print("Default Graph: ");
-
+        searcher = new DepthFirstSearch<>(graph);
+        test.shouldTakeThePathOfADefaultGraphWhenTwoVertexAreSet(searcher);
     }
 
     @Test
     void shouldTakeThePathOfAWeightedGraphWhenTwoVertexAreSet() {
         WeightedGraph graph = reader.readWeightedGraph();
-
-        GraphSearch<Integer> searcher = new DepthFirstSearch<>(graph);
-        path = searcher.findPath(from, to);
-
-        assertNotNull(path);
-
-        Integer first = path.getFirst();
-        assertEquals(from, first);
-
-        Integer last = path.getLast();
-        assertEquals(to, last);
-
-        System.out.print("Weighted Graph: ");
+        searcher = new DepthFirstSearch<>(graph);
+        test.shouldTakeThePathOfAWeightedGraphWhenTwoVertexAreSet(searcher);
     }
 }
