@@ -2,7 +2,6 @@ package br.com.caelum.delfos.graphs.searches;
 
 import br.com.caelum.delfos.graphs.Graph;
 import org.jgrapht.GraphPath;
-import org.jgrapht.alg.interfaces.ShortestPathAlgorithm.SingleSourcePaths;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 
 import java.util.LinkedList;
