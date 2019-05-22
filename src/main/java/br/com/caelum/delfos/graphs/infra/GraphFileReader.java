@@ -1,11 +1,9 @@
 package br.com.caelum.delfos.graphs.infra;
 
-
 import br.com.caelum.delfos.graphs.DefaultGraph;
 import br.com.caelum.delfos.graphs.WeightedGraph;
 import br.com.caelum.delfos.graphs.mappers.OldCoursesToNewCousesMapper;
-import io.vavr.Tuple;
-import io.vavr.Tuple2;
+import br.com.caelum.delfos.graphs.mappers.Pair;
 import org.jgrapht.Graph;
 import org.jgrapht.graph.DefaultDirectedGraph;
 import org.jgrapht.graph.DefaultDirectedWeightedGraph;
@@ -15,14 +13,11 @@ import org.jgrapht.graph.DefaultWeightedEdge;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class GraphFileReader {
 
     private final Scanner scanner;
-
 
     public GraphFileReader(String file) {
         Path path = Paths.get(file);
@@ -42,10 +37,10 @@ public class GraphFileReader {
 
             String[] destinations = extractDestinations(line);
 
-            List<Tuple2<Integer, Integer>> links = getLinks(destinations);
-            for (Tuple2<Integer, Integer> link : links) {
-                Integer from = OldCoursesToNewCousesMapper.getRelativeCourse(link._1);
-                Integer to = OldCoursesToNewCousesMapper.getRelativeCourse(link._2);
+            List<Pair> links = getLinks(destinations);
+            for (Pair link : links) {
+                Integer from = OldCoursesToNewCousesMapper.getRelativeCourse(link.getFrom());
+                Integer to = OldCoursesToNewCousesMapper.getRelativeCourse(link.getTo());
 
                 if(from.equals(to)) {
                     continue;
@@ -56,7 +51,6 @@ public class GraphFileReader {
                 graph.addEdge(from, to);
             }
         }
-
         return new DefaultGraph(graph);
     }
 
@@ -68,10 +62,10 @@ public class GraphFileReader {
 
             String[] destinations = extractDestinations(line);
 
-            List<Tuple2<Integer, Integer>> links = getLinks(destinations);
-            for (Tuple2<Integer, Integer> link : links) {
-                Integer from = OldCoursesToNewCousesMapper.getRelativeCourse(link._1);
-                Integer to = OldCoursesToNewCousesMapper.getRelativeCourse(link._2);
+            List<Pair> links = getLinks(destinations);
+            for (Pair link : links) {
+                Integer from = OldCoursesToNewCousesMapper.getRelativeCourse(link.getFrom());
+                Integer to = OldCoursesToNewCousesMapper.getRelativeCourse(link.getTo());
 
                 if(from.equals(to)) {
                     continue;
@@ -81,17 +75,14 @@ public class GraphFileReader {
                 graph.addVertex(to);
                 DefaultWeightedEdge edge = graph.addEdge(from, to);
 
-
                 if(edge == null) {
                     DefaultWeightedEdge e = graph.getEdge(from, to);
 
                     double weight = graph.getEdgeWeight(e) + 1.0;
                     graph.setEdgeWeight(e, weight);
                 }
-
             }
         }
-
         return new WeightedGraph(graph);
     }
 
@@ -102,18 +93,17 @@ public class GraphFileReader {
                 .split(" ");
     }
 
-    private List<Tuple2<Integer, Integer>> getLinks(String... destinations) {
-        LinkedList<Tuple2<Integer, Integer>> links = new LinkedList<>();
+    private List<Pair> getLinks(String... destinations) {
+        LinkedList<Pair> links = new LinkedList<>();
 
         for(int i = 0; i < destinations.length - 1; i++) {
-            Integer to = Integer.parseInt(destinations[i]);
-            Integer from = Integer.parseInt(destinations[i + 1]);
+            Integer from = Integer.parseInt(destinations[i]);
+            Integer to = Integer.parseInt(destinations[i + 1]);
 
-            Tuple2<Integer, Integer> link = Tuple.of(to, from);
+            Pair link = new Pair(from,to);
 
             links.add(link);
         }
-
         return links;
     }
 }

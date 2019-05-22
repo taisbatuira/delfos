@@ -5,7 +5,7 @@ import org.jgrapht.traverse.BreadthFirstIterator;
 
 import java.util.Iterator;
 
-public class DecoratorBreadthFirstIterator<V, E> implements Decorator<V, E> {
+public class StrategyBreadthFirstIterator<V, E> implements Strategy<V, E> {
 
     public Iterator<V> getIterator(Graph<V, E> graph, V start) {
         return new BreadthFirstIterator<>(graph.getGraphT(), start);

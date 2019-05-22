@@ -11,7 +11,7 @@ public interface GraphSearch<V> {
 
     LinkedList<V> findPath(V from, V to);
 
-    default <E> LinkedList<V> getPath(V from, V to, Graph<V, E> graph, Decorator<V, E> decorator) {
+    default <E> LinkedList<V> getPath(V from, V to, Graph<V, E> graph, Strategy<V, E> strategy) {
         V start;
         LinkedList<V> path= new LinkedList<>();
         Optional<V> vertex = graph.getVertex(from);
@@ -22,7 +22,7 @@ public interface GraphSearch<V> {
 
         start = vertex.get();
 
-        Iterator<V> search = decorator.getIterator(graph, start);
+        Iterator<V> search = strategy.getIterator(graph, start);
 
         while (search.hasNext()) {
             V v = search.next();

@@ -30,11 +30,6 @@
             <artifactId>jgrapht-ext</artifactId>
             <version>1.0.1</version>
         </dependency>
-        <dependency>
-            <groupId>io.vavr</groupId>
-            <artifactId>vavr</artifactId>
-            <version>0.10.0</version>
-        </dependency>
 
         <dependency>
             <groupId>org.junit.jupiter</groupId>

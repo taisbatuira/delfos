@@ -13,6 +13,6 @@ public class BreadthFirstSearch<V, E> implements GraphSearch<V> {
 
     @Override
     public LinkedList<V> findPath(V from, V to) {
-        return getPath(from, to, graph, new DecoratorBreadthFirstIterator<>());
+        return getPath(from, to, graph, new StrategyBreadthFirstIterator<>());
     }
 }

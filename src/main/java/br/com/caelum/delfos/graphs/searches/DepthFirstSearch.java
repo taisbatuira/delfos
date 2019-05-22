@@ -13,6 +13,6 @@ public class DepthFirstSearch<V, E> implements GraphSearch<V> {
 
     @Override
     public LinkedList<V> findPath(V from, V to) {
-        return getPath(from, to, graph, new DecoratorDepthFirstSearch<>());
+        return getPath(from, to, graph, new StrategyDepthFirstSearch<>());
     }
 }

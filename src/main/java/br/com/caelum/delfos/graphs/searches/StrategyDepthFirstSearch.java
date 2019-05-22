@@ -5,7 +5,7 @@ import org.jgrapht.traverse.DepthFirstIterator;
 
 import java.util.Iterator;
 
-public class DecoratorDepthFirstSearch<V, E> implements Decorator<V, E> {
+public class StrategyDepthFirstSearch<V, E> implements Strategy<V, E> {
 
     public Iterator<V> getIterator(Graph<V, E> graph, V start) {
         return new DepthFirstIterator<>(graph.getGraphT(), start);

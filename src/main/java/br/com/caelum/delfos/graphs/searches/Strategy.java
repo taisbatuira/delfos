@@ -4,7 +4,7 @@ import br.com.caelum.delfos.graphs.Graph;
 
 import java.util.Iterator;
 
-public interface Decorator<V, E> {
+public interface Strategy<V, E> {
 
     Iterator<V> getIterator(Graph<V, E> graph, V start);
 }
