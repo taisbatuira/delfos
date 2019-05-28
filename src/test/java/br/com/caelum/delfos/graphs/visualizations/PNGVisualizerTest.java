@@ -21,11 +21,15 @@ class PNGVisualizerTest {
     private final String pathWeightedGraph = "data/visualization-weighted-graph.png";
     private final String pathToUserPathFromDefaultGraph = "data/visualization-path-user-graph.png";
     private final String pathToUserPathFromWeightedGraph = "data/visualization-path-user-weighted-graph.png";
+    private int from;
+    private int to;
 
 
     @BeforeEach
     void setUp() {
-        reader = new GraphFileReader("data/sample-visualization.txt");
+        reader = new GraphFileReader("data/sample.txt");
+        from = 605;
+        to = 289;
     }
 
     @Test
@@ -53,7 +57,7 @@ class PNGVisualizerTest {
         DefaultGraph graph = reader.readDefaultGraph();
 
         GraphSearch<Integer> searcher = new AStarSearch<>(graph);
-        LinkedList<Integer> path = searcher.findPath(440, 201);
+        LinkedList<Integer> path = searcher.findPath(from, to);
 
         PNGVisualizer<Integer, DefaultEdge> visualizer = new PNGVisualizer<>();
         boolean imageExists = visualizer.exportPath(path, pathToUserPathFromDefaultGraph);
@@ -66,7 +70,7 @@ class PNGVisualizerTest {
         WeightedGraph graph = reader.readWeightedGraph();
 
         GraphSearch<Integer> searcher = new AStarSearch<>(graph);
-        LinkedList<Integer> path = searcher.findPath(440, 201);
+        LinkedList<Integer> path = searcher.findPath(from, to);
 
         PNGVisualizer<Integer, DefaultEdge> visualizer = new PNGVisualizer<>();
         boolean imageExists = visualizer.exportPath(path, pathToUserPathFromWeightedGraph);
