@@ -10,23 +10,16 @@ import org.jgrapht.graph.DefaultDirectedWeightedGraph;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.DefaultWeightedEdge;
 
-import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.*;
 
-public class GraphFileReader {
+public class GraphFileReader extends FileReader {
 
     private final Scanner scanner;
+    private OldCoursesToNewCousesMapper oldToNewMapper = new OldCoursesToNewCousesMapper();
 
     public GraphFileReader(String file) {
-        Path path = Paths.get(file);
-        try {
-            scanner = new Scanner(path);
-        } catch (IOException e) {
-            throw new RuntimeException("Cannot read file: " + path, e);
-        }
-        scanner.useDelimiter("(\\s)?](\n)?");
+        super(file);
+        scanner = super.getScanner();
     }
 
     public DefaultGraph readDefaultGraph() {
@@ -39,8 +32,8 @@ public class GraphFileReader {
 
             List<Pair> links = getLinks(destinations);
             for (Pair link : links) {
-                Integer from = OldCoursesToNewCousesMapper.getRelativeCourse(link.getFrom());
-                Integer to = OldCoursesToNewCousesMapper.getRelativeCourse(link.getTo());
+                Integer from = oldToNewMapper.getRelativeCourse(link.getFrom());
+                Integer to = oldToNewMapper.getRelativeCourse(link.getTo());
 
                 if(from.equals(to)) {
                     continue;
@@ -64,8 +57,8 @@ public class GraphFileReader {
 
             List<Pair> links = getLinks(destinations);
             for (Pair link : links) {
-                Integer from = OldCoursesToNewCousesMapper.getRelativeCourse(link.getFrom());
-                Integer to = OldCoursesToNewCousesMapper.getRelativeCourse(link.getTo());
+                Integer from = oldToNewMapper.getRelativeCourse(link.getFrom());
+                Integer to = oldToNewMapper.getRelativeCourse(link.getTo());
 
                 if(from.equals(to)) {
                     continue;
@@ -86,13 +79,6 @@ public class GraphFileReader {
         return new WeightedGraph(graph);
     }
 
-    private String[] extractDestinations(String line) {
-        return line.replaceAll("(\\[\\s*|\\[\\d)|(\\n?])", "")
-                .replaceAll("(\\s+)|(\\n\\s?)", " ")
-                .replaceAll("\\s{2,}", " ")
-                .split(" ");
-    }
-
     private List<Pair> getLinks(String... destinations) {
         LinkedList<Pair> links = new LinkedList<>();
 
@@ -101,7 +87,6 @@ public class GraphFileReader {
             Integer to = Integer.parseInt(destinations[i + 1]);
 
             Pair link = new Pair(from,to);
-
             links.add(link);
         }
         return links;
