@@ -1,6 +1,7 @@
 package br.com.caelum.delfos.graphs.mappers;
 
 import br.com.caelum.delfos.graphs.infra.RedirectFileReader;
+import br.com.caelum.delfos.graphs.infra.StringsFile;
 
 import java.util.Map;
 
@@ -11,7 +12,7 @@ public class OldCoursesToNewCousesMapper {
     private RedirectFileReader reader;
 
     public OldCoursesToNewCousesMapper() {
-        reader = new RedirectFileReader("data/redirected_courses.txt");
+        reader = new RedirectFileReader(StringsFile.REDIRECTED_COURSES_FILE);
     }
 
     public Integer getRelativeCourse(Integer courseId) {

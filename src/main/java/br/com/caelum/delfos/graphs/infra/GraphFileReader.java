@@ -2,7 +2,6 @@ package br.com.caelum.delfos.graphs.infra;
 
 import br.com.caelum.delfos.graphs.DefaultGraph;
 import br.com.caelum.delfos.graphs.WeightedGraph;
-import br.com.caelum.delfos.graphs.mappers.OldCoursesToNewCousesMapper;
 import br.com.caelum.delfos.graphs.mappers.Pair;
 import org.jgrapht.Graph;
 import org.jgrapht.graph.DefaultDirectedGraph;
@@ -15,7 +14,6 @@ import java.util.*;
 public class GraphFileReader extends FileReader {
 
     private final Scanner scanner;
-    private OldCoursesToNewCousesMapper oldToNewMapper = new OldCoursesToNewCousesMapper();
 
     public GraphFileReader(String file) {
         super(file);
@@ -32,8 +30,8 @@ public class GraphFileReader extends FileReader {
 
             List<Pair> links = getLinks(destinations);
             for (Pair link : links) {
-                Integer from = oldToNewMapper.getRelativeCourse(link.getFrom());
-                Integer to = oldToNewMapper.getRelativeCourse(link.getTo());
+                Integer from = link.getFrom();
+                Integer to = link.getTo();
 
                 if(from.equals(to)) {
                     continue;
@@ -57,8 +55,9 @@ public class GraphFileReader extends FileReader {
 
             List<Pair> links = getLinks(destinations);
             for (Pair link : links) {
-                Integer from = oldToNewMapper.getRelativeCourse(link.getFrom());
-                Integer to = oldToNewMapper.getRelativeCourse(link.getTo());
+
+                Integer from = link.getFrom();
+                Integer to = link.getTo();
 
                 if(from.equals(to)) {
                     continue;

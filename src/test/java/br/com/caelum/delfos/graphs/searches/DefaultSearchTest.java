@@ -1,5 +1,9 @@
 package br.com.caelum.delfos.graphs.searches;
 
+import br.com.caelum.delfos.graphs.infra.GraphFileReader;
+import br.com.caelum.delfos.graphs.infra.GraphFileReaderFactory;
+import br.com.caelum.delfos.graphs.infra.StringsFile;
+
 import java.util.LinkedList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -7,11 +11,13 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class DefaultSearchTest {
 
+    private GraphFileReader reader;
     private Integer from;
     private Integer to;
     private LinkedList<Integer> path;
 
     void setUp() {
+        reader = GraphFileReaderFactory.from(StringsFile.DEFAULT_DATA_FILE);
         from = 605;
         to = 289;
     }
@@ -49,5 +55,9 @@ class DefaultSearchTest {
         assertEquals(to, last);
 
         System.out.print("Weighted Graph: ");
+    }
+
+    public GraphFileReader getReader() {
+        return reader;
     }
 }

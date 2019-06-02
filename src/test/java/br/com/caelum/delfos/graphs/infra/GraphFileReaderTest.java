@@ -6,6 +6,8 @@ import br.com.caelum.delfos.graphs.WeightedGraph;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
+
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 
@@ -16,7 +18,7 @@ class GraphFileReaderTest {
 
     @BeforeAll
     static void setup() {
-        reader = new GraphFileReader("data/sample.txt");
+        reader = GraphFileReaderFactory.from(StringsFile.DEFAULT_DATA_FILE);
     }
 
     @Test

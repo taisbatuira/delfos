@@ -9,13 +9,11 @@ import org.junit.jupiter.api.Test;
 
 class BreadthFirstSearchTest {
 
-    private GraphFileReader reader;
     private DefaultSearchTest test;
     private GraphSearch<Integer> searcher;
 
     @BeforeEach
     void setUp() {
-        reader = new GraphFileReader("data/sample.txt");
         test = new DefaultSearchTest();
         test.setUp();
     }
@@ -27,14 +25,14 @@ class BreadthFirstSearchTest {
 
     @Test
     void shouldTakeThePathOfADefaultGraphWhenTwoVertexAreSet() {
-        DefaultGraph graph = reader.readDefaultGraph();
+        DefaultGraph graph = test.getReader().readDefaultGraph();
         searcher = new BreadthFirstSearch<>(graph);
         test.shouldTakeThePathOfADefaultGraphWhenTwoVertexAreSet(searcher);
     }
 
     @Test
     void shouldTakeThePathOfAWeightedGraphWhenTwoVertexAreSet() {
-        WeightedGraph graph = reader.readWeightedGraph();
+        WeightedGraph graph = test.getReader().readWeightedGraph();
         searcher = new BreadthFirstSearch<>(graph);
         test.shouldTakeThePathOfAWeightedGraphWhenTwoVertexAreSet(searcher);
     }
