@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.File;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 
 class GraphFileReaderTest {
@@ -35,4 +35,10 @@ class GraphFileReaderTest {
         assertNotNull(graph);
     }
 
+    @Test
+    void shouldParseFile() {
+        String[] strings = reader.extractDestinations("[       49     126          127        289       ]\n");
+        String[] expected = {"49", "126", "127", "289"};
+        assertArrayEquals(expected, strings);
+    }
 }
