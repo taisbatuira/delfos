@@ -29,10 +29,10 @@ public class UpdateData extends FileReader {
                 String[] destinations = extractDestinations(line);
 
                 for (int i = 0; i < destinations.length; i++) {
-                    Integer bla = Integer.parseInt(destinations[i]);
-                    Integer blabs = oldToNewMapper.getRelativeCourse(bla);
-                    String dest = destinations[i].replace(destinations[i], blabs.toString());
-                    out.write(dest + " ");
+                    Integer courseId = Integer.parseInt(destinations[i]);
+                    Integer updatedCourseId = oldToNewMapper.getRelativeCourse(courseId);
+                    String courseString = destinations[i].replace(destinations[i], updatedCourseId.toString());
+                    out.write(courseString + " ");
                     out.flush();
                 }
             }
@@ -41,5 +41,4 @@ public class UpdateData extends FileReader {
         }
         return this.file;
     }
-
 }
