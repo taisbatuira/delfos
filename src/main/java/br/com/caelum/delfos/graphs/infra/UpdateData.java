@@ -5,6 +5,7 @@ import br.com.caelum.delfos.graphs.mappers.OldCoursesToNewCousesMapper;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class UpdateData extends FileReader {
@@ -25,16 +26,17 @@ public class UpdateData extends FileReader {
             BufferedWriter out = new BufferedWriter(fileWriter);
             while (scanner.hasNext()) {
                 String line = scanner.next();
+                ArrayList<String> courses = new ArrayList<>();
 
                 String[] destinations = extractDestinations(line);
 
                 for (int i = 0; i < destinations.length; i++) {
                     Integer courseId = Integer.parseInt(destinations[i]);
                     Integer updatedCourseId = oldToNewMapper.getRelativeCourse(courseId);
-                    String courseString = destinations[i].replace(destinations[i], updatedCourseId.toString());
-                    out.write(courseString + " ");
-                    out.flush();
+                    courses.add(destinations[i].replace(destinations[i], updatedCourseId.toString()));
                 }
+                out.write(String.join(" ", courses) + "\n");
+                out.flush();
             }
         } catch (Exception ex) {
             ex.printStackTrace();
